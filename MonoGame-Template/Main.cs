@@ -18,6 +18,7 @@ namespace MonoGame_Template
         public static int WindowWidth { get; set; }
 
         public static IScene CurrentScene;
+        public static GameTime GameTime;
 
         public Main()
         {
@@ -56,6 +57,8 @@ namespace MonoGame_Template
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            Main.GameTime = gameTime;
 
             CurrentScene.Update(gameTime);
 

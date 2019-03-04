@@ -38,7 +38,6 @@ namespace MonoGame_Template.Common.Scenes.Menu
         public void Update(GameTime gameTime)
         {
             var keyboardState = Keyboard.GetState();
-            var keys = keyboardState.GetPressedKeys();
 
             if (keyboardState.IsKeyPressed(Keys.Down) || keyboardState.IsKeyPressed(Keys.Up))
             {
