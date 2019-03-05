@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame_Template.Common.Scenes;
@@ -19,12 +20,13 @@ namespace MonoGame_Template
 
         public static IScene CurrentScene;
         public static GameTime GameTime;
+        public static ContentManager ContentManager;
 
         public Main()
         {
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
+            ContentManager = Content;
             Self = this;
         }
 

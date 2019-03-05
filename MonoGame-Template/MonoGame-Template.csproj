@@ -42,7 +42,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Common\Helpers\InputHelper.cs" />
-    <Compile Include="Common\Scenes\GamePlay.cs" />
+    <Compile Include="Common\Scenes\GamePlay\Player\Player.cs" />
+    <Compile Include="Common\Scenes\GamePlay\GamePlay.cs" />
+    <Compile Include="Common\Scenes\GamePlay\Terrain\Grass.cs" />
     <Compile Include="Common\Scenes\Interfaces\IScene.cs" />
     <Compile Include="Common\Scenes\Menu\Menu.cs" />
     <Compile Include="Common\Scenes\Menu\Enums\MenuItem.cs" />
