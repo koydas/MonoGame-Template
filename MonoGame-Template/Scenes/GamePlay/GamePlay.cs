@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Template.Common.Helpers;
+using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.GamePlay.Terrain;
 using MonoGame_Template.Common.Scenes.Interfaces;
 
@@ -12,8 +14,10 @@ namespace MonoGame_Template.Common.Scenes.GamePlay
     {
         public List<Texture2D> idle;
 
-        private Player.Player _player;
+        private MonoGame_Template.Scenes.GamePlay.Player.Player _player;
         private List<Grass> _grassList;
+
+        private List<ICollider> colliders;
 
         public GamePlay()
         {
@@ -23,7 +27,8 @@ namespace MonoGame_Template.Common.Scenes.GamePlay
 
         public void Initialize()
         {
-            _player = new Player.Player();
+            colliders = new List<ICollider>();
+            _player = new MonoGame_Template.Scenes.GamePlay.Player.Player();
             _grassList = new List<Grass>();
 
             var tileWidth = 32;
@@ -35,9 +40,13 @@ namespace MonoGame_Template.Common.Scenes.GamePlay
                 var newGrass = new Grass(grassPosition);
                 
                 _grassList.Add(newGrass);
-
                 grassPosition.X += 32;
             }
+
+            colliders.Add(_player);
+            colliders.AddRange(_grassList);
+
+        
         }
 
         public void LoadContent(ContentManager content)
@@ -57,6 +66,17 @@ namespace MonoGame_Template.Common.Scenes.GamePlay
         public void Update(GameTime gameTime)
         {
             _player.Update(gameTime);
+
+            foreach (ICollider collider in colliders)
+            {
+                if (collider is IGravity gravity && !gravity.IsGrounded)
+                {
+                    var velocityY = collider.Velocity.Y + 1;
+                    collider.Velocity = new Vector2(collider.Velocity.X, velocityY);
+                }
+
+                collider.IsColliding(colliders);
+            }
         }
 
         public void Draw(GameTime gameTime)
@@ -71,7 +91,7 @@ namespace MonoGame_Template.Common.Scenes.GamePlay
 
             foreach (var grass in _grassList)
             {
-                Main.SpriteBatch.Draw(grass.Texture, grass.Position, Color.White);
+                Main.SpriteBatch.Draw(grass.CurrentTexture, grass.Position, Color.White);
             }
             
 

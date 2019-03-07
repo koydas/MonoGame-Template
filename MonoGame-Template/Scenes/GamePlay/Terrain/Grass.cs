@@ -1,13 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Template.Common.Interfaces;
 
 namespace MonoGame_Template.Common.Scenes.GamePlay.Terrain
 {
-    public class Grass
+    public class Grass: ICollider
     {
-        public Texture2D Texture;
         public Vector2 Position { get; set; }
+        public Vector2 Velocity { get; set; }
+        public Texture2D CurrentTexture { get; set; }
 
         public Grass(Vector2 position)
         {
@@ -16,7 +18,12 @@ namespace MonoGame_Template.Common.Scenes.GamePlay.Terrain
 
         public void LoadContent(ContentManager content)
         {
-            Texture = content.Load<Texture2D>("images/grass");
+            CurrentTexture = content.Load<Texture2D>("images/grass");
+        }
+
+        public void OnCollision(ICollider mainCollider)
+        {
+            // We do nothing here
         }
     }
 }

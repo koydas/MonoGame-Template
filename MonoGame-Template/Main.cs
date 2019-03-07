@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame_Template.Common.Scenes;
 using MonoGame_Template.Common.Scenes.Interfaces;
 using MonoGame_Template.Common.Scenes.Menu;
+using MonoGame_Template.Scenes.Menu;
 
 namespace MonoGame_Template
 {
