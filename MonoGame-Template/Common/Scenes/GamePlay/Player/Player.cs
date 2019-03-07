@@ -84,7 +84,7 @@ namespace MonoGame_Template.Common.Scenes.GamePlay.Player
 
 
             var clampedVelocity = Vector2.Clamp(Velocity, _maxSpeed, new Vector2(Math.Abs(_maxSpeed.X), 0));
-
+            
             if (Velocity.X != 0)
             {
                 _playerState = PlayerState.Walk;
@@ -93,7 +93,17 @@ namespace MonoGame_Template.Common.Scenes.GamePlay.Player
             {
                 _playerState = PlayerState.Idle;
             }
+
             Position += clampedVelocity;
+
+            if (Position.X < 0)
+            {
+                Position.X = 0;
+            }
+            else if (Position.X  > Main.WindowWidth - 64)
+            {
+                Position.X = Main.WindowWidth - 64;
+            }
         }
 
         public void Draw(GameTime gameTime)
