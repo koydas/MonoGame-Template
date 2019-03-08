@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Template.Common.Helpers;
 using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.GamePlay.Player;
 using MonoGame_Template.Common.Scenes.GamePlay.Terrain;
@@ -27,6 +28,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
         private bool _faceRight;
         private readonly float _movementSpeed;
         private readonly Vector2 _maxSpeed;
+        private readonly int _jumpForce;
         private PlayerState _playerState;
         
 
@@ -35,11 +37,12 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
             _idle = new List<Texture2D>();
             _walk = new List<Texture2D>();
 
-            Position = new Vector2(32, 0);
+            Position = new Vector2(32, Main.WindowHeight - 32);
             _faceRight = true;
 
             _movementSpeed =  0.05f;
-            _maxSpeed = new Vector2(-4, -4);
+            _jumpForce = 1;
+            _maxSpeed = new Vector2(-4, -10);
             _playerState = PlayerState.Idle;
         }
 
@@ -91,7 +94,13 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
                 velocityX = 0;
             }
 
-
+            if (keyboardState.IsKeyPressed(Keys.Up) && IsGrounded)
+            {
+                
+                velocityY -= _jumpForce * deltaTime;
+                IsGrounded = false;
+            }
+            
             var clampedVelocity = Vector2.Clamp(Velocity, _maxSpeed, new Vector2(Math.Abs(_maxSpeed.X), Math.Abs(_maxSpeed.Y)));
             
             _playerState = velocityX != 0 
@@ -143,10 +152,11 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
 
         public void OnCollision(ICollider collider)
         {
-            // TODO : Gérer les collisions sur X   
-            Velocity = new Vector2(Velocity.X, 0);
-
-            IsGrounded = true;
+                // TODO : Gérer les collisions sur X   
+                Velocity = new Vector2(Velocity.X, 0);
+                Position = new Vector2(Position.X, collider.Position.Y - collider.CurrentTexture.Height);
+                IsGrounded = true;
+            
         }
 
         private Texture2D Animate(List<Texture2D> textureList, GameTime gameTime)
