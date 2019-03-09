@@ -7,17 +7,18 @@ using MonoGame_Template.Common.Helpers;
 using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.GamePlay.Terrain;
 using MonoGame_Template.Common.Scenes.Interfaces;
+using MonoGame_Template.Scenes.GamePlay.Terrain.Interfaces;
 
-namespace MonoGame_Template.Common.Scenes.GamePlay
+namespace MonoGame_Template.Scenes.GamePlay
 {
     public class GamePlay : IScene
     {
         public List<Texture2D> idle;
 
         private MonoGame_Template.Scenes.GamePlay.Player.Player _player;
-        private List<Grass> _grassList;
 
         private List<ICollider> colliders;
+        private ITerrain[][] _tiles;
 
         public GamePlay()
         {
@@ -29,33 +30,42 @@ namespace MonoGame_Template.Common.Scenes.GamePlay
         {
             colliders = new List<ICollider>();
             _player = new MonoGame_Template.Scenes.GamePlay.Player.Player();
-            _grassList = new List<Grass>();
 
-            var tileWidth = 32;
-            var numberOfTiles = Main.WindowWidth / tileWidth;
-            var grassPosition = new Vector2(0, Main.WindowHeight - tileWidth*2);
+            int[][] tilemap = {
+                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0},
+                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+                new [] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+            };
 
-            for (int i = 0; i < numberOfTiles; i++)
-            {
-                var newGrass = new Grass(grassPosition);
-                
-                _grassList.Add(newGrass);
-                grassPosition.X += 32;
-            }
+            var tilemapenum = tilemap.ToEnum();
+            _tiles = TileMapManager.Generate(tilemapenum);
+
+
+            var tilesFlatList = _tiles
+                .SelectMany(x => x.Select(y => y))
+                .Where(x => x is ICollider)
+                .Cast<ICollider>()
+                .ToArray();
 
             colliders.Add(_player);
-            colliders.AddRange(_grassList);
-
-        
+            colliders.AddRange(tilesFlatList);
         }
 
         public void LoadContent(ContentManager content)
         {
             _player.LoadContent(content);
 
-            foreach (var grass in _grassList)
+            TileMapManager.LoadContent(content);
+
+            foreach (var tile in _tiles.SelectMany(x => x.Select(y => y)))
             {
-                grass.LoadContent(content);
+                tile.LoadContent(content);
             }
         }
 
@@ -88,12 +98,12 @@ namespace MonoGame_Template.Common.Scenes.GamePlay
             _player.Draw(gameTime);
 
             // Draw Terrain
+            TileMapManager.Draw(Main.SpriteBatch);
 
-            foreach (var grass in _grassList)
+            foreach (var tile in _tiles.SelectMany(x => x.Select(y => y)))
             {
-                Main.SpriteBatch.Draw(grass.CurrentTexture, grass.Position, Color.White);
+                Main.SpriteBatch.Draw(tile.CurrentTexture, tile.Position, Color.White);
             }
-            
 
             Main.SpriteBatch.End();
         }

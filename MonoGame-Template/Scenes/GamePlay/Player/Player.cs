@@ -37,7 +37,8 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
             _idle = new List<Texture2D>();
             _walk = new List<Texture2D>();
 
-            Position = new Vector2(32, Main.WindowHeight - 32);
+            Position = new Vector2(32, 32);
+            //Position = new Vector2(32, Main.WindowHeight - 32);
             _faceRight = true;
 
             _movementSpeed =  0.05f;
@@ -94,9 +95,8 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
                 velocityX = 0;
             }
 
-            if (keyboardState.IsKeyPressed(Keys.Up) && IsGrounded)
-            {
-                
+            if (keyboardState.IsKeyPressed(Keys.Up) /*&& IsGrounded*/)
+            {   
                 velocityY -= _jumpForce * deltaTime;
                 IsGrounded = false;
             }
@@ -155,7 +155,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
                 // TODO : Gérer les collisions sur X   
                 Velocity = new Vector2(Velocity.X, 0);
                 Position = new Vector2(Position.X, collider.Position.Y - collider.CurrentTexture.Height);
-                IsGrounded = true;
+                //IsGrounded = true;
             
         }
 

@@ -25,7 +25,15 @@ namespace MonoGame_Template
 
         public Main()
         {
-            Graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = 960,
+                PreferredBackBufferHeight = 540
+            };
+
+            //Graphics.ToggleFullScreen();
+            Graphics.ApplyChanges();
+
             Content.RootDirectory = "Content";
             ContentManager = Content;
             Self = this;

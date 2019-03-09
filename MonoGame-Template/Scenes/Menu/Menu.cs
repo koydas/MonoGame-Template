@@ -51,7 +51,7 @@ namespace MonoGame_Template.Scenes.Menu
                 switch (_selectedMenuItem)
                 {
                     case MenuItem.Play:
-                        Main.CurrentScene = new Common.Scenes.GamePlay.GamePlay();
+                        Main.CurrentScene = new GamePlay.GamePlay();
                         break;
                     case MenuItem.Quit:
                         Main.Self.Exit();

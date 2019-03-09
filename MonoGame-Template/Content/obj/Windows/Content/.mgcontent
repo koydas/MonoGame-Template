@@ -12,8 +12,10 @@
     <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_1.png</File>
     <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_2.png</File>
     <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_3.png</File>
+    <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/sun.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

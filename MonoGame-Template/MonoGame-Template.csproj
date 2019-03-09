@@ -44,12 +44,16 @@
     <Compile Include="Common\Helpers\CollisionManager.cs" />
     <Compile Include="Common\Helpers\InputHelper.cs" />
     <Compile Include="Common\Helpers\MathExtensions.cs" />
+    <Compile Include="Common\Helpers\TileMapManager.cs" />
     <Compile Include="Common\Interfaces\ICollider.cs" />
     <Compile Include="Common\Interfaces\IGravity.cs" />
     <Compile Include="Scenes\GamePlay\Player\Player.cs" />
     <Compile Include="Scenes\GamePlay\GamePlay.cs" />
     <Compile Include="Scenes\GamePlay\Player\PlayerState.cs" />
     <Compile Include="Scenes\GamePlay\Terrain\Grass.cs" />
+    <Compile Include="Scenes\GamePlay\Terrain\Interfaces\ITerrain.cs" />
+    <Compile Include="Scenes\GamePlay\Terrain\Sun.cs" />
+    <Compile Include="Scenes\GamePlay\Terrain\Enums\TerrainType.cs" />
     <Compile Include="Scenes\Interfaces\IScene.cs" />
     <Compile Include="Scenes\Menu\Menu.cs" />
     <Compile Include="Scenes\Menu\Enums\MenuItem.cs" />
