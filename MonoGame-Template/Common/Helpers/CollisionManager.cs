@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame_Template.Common.Helpers.Enum;
 using MonoGame_Template.Common.Interfaces;
+using MonoGame_Template.Scenes.GamePlay.Player;
 
 namespace MonoGame_Template.Common.Helpers
 {
@@ -13,21 +9,24 @@ namespace MonoGame_Template.Common.Helpers
     {
         public static bool MovementAllowed(this ICollider mainCollider, Vector2 movement, IEnumerable<ICollider> colliders)
         {
-            var anticipatedCollider = mainCollider;
+            var anticipatedCollider = new Player() as ICollider;
 
-            anticipatedCollider.Position = mainCollider.Position + movement;
+            anticipatedCollider.CurrentTexture = mainCollider.CurrentTexture;
+            anticipatedCollider.Position = new Vector2
+            {
+                X = mainCollider.Position.X + movement.X,
+                Y = mainCollider.Position.Y + movement.Y
+            };
 
             foreach (var collider in colliders)
             {
-                if (collider?.Position == null || collider?.CurrentTexture == null)
+                if (collider?.Position == null || collider?.CurrentTexture == null && mainCollider.Equals(collider))
                 {
                     continue;
                 }
 
                 if (anticipatedCollider.Intersects(collider))
                 {
-                    //mainCollider.OnCollision(collider);
-                    //collider.OnCollision(mainCollider);
                     return false;
                 }
             }

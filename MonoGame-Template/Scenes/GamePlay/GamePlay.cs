@@ -89,7 +89,6 @@ namespace MonoGame_Template.Scenes.GamePlay
                 else
                 {
                     collider.Velocity = new Vector2();
-
                 }
             }
 
