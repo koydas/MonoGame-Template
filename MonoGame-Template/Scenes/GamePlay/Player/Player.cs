@@ -124,7 +124,6 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
             {
                 Position = new Vector2(Main.WindowWidth - 64, Position.Y);
             }
-
         }
 
         public void Draw(GameTime gameTime)
@@ -157,43 +156,43 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
             }
         }
 
-        public void OnCollision(ICollider collider)
-        {
-            var collisionType = this.GetCollisionType(collider);
+        //public void OnCollision(ICollider collider)
+        //{
+        //    var collisionType = this.GetCollisionType(collider);
 
-            var velocity = new Vector2(Velocity.X, Velocity.Y);
-            var position = new Vector2(Position.X, Position.Y);
+        //    var velocity = new Vector2(Velocity.X, Velocity.Y);
+        //    var position = new Vector2(Position.X, Position.Y);
 
-            if (collisionType == CollisionSide.Top)
-            {
-                IsGrounded = true;
-                velocity.Y = 0;
-                position.Y = collider.Position.Y - collider.CurrentTexture.Height;
-            }
+        //    if (collisionType == CollisionSide.Bottom)
+        //    {
+        //        IsGrounded = true;
+        //        velocity.Y = 0;
+        //        position.Y = collider.Position.Y - collider.CurrentTexture.Height;
+        //    }
 
-            if (collisionType == CollisionSide.Bottom)
-            {
-                velocity.Y = 0;
-                position.Y = collider.GetRect().Bottom + collider.GetRect().Height;
-            }
+        //    if (collisionType == CollisionSide.Top)
+        //    {
+        //        velocity.Y = 0;
+        //        position.Y = collider.GetRect().Bottom + collider.GetRect().Height;
+        //    }
 
-            if (collisionType == CollisionSide.Right)
-            {
-                velocity.X = 0;
-                position.X = collider.GetRect().Right;
-            }
+        //    if (collisionType == CollisionSide.Left)
+        //    {
+        //        velocity.X = 0;
+        //        position.X = collider.GetRect().Right;
+        //    }
 
-            if (collisionType == CollisionSide.Left)
-            {
-                velocity.X = 0;
-                position.X = collider.GetRect().Left - CurrentTexture.Width;
-            }
+        //    if (collisionType == CollisionSide.Right)
+        //    {
+        //        velocity.X = 0;
+        //        position.X = collider.GetRect().Left - CurrentTexture.Width;
+        //    }
             
-            var clampedVelocity = Vector2.Clamp(velocity, MaxVelocity, new Vector2(Math.Abs(MaxVelocity.X), Math.Abs(MaxVelocity.Y)));
+        //    var clampedVelocity = Vector2.Clamp(velocity, MaxVelocity, new Vector2(Math.Abs(MaxVelocity.X), Math.Abs(MaxVelocity.Y)));
 
-            Velocity = clampedVelocity;
-            Position = position;
-        }
+        //    Velocity = clampedVelocity;
+        //    Position = position;
+        //}
 
         private Texture2D Animate(List<Texture2D> textureList, GameTime gameTime)
         {

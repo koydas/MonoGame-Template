@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame_Template.Common.Helpers;
 using MonoGame_Template.Common.Interfaces;
-using MonoGame_Template.Common.Scenes.GamePlay.Terrain;
 using MonoGame_Template.Common.Scenes.Interfaces;
 using MonoGame_Template.Scenes.GamePlay.Terrain.Interfaces;
 
@@ -17,7 +16,7 @@ namespace MonoGame_Template.Scenes.GamePlay
 
         private MonoGame_Template.Scenes.GamePlay.Player.Player _player;
 
-        private List<ICollider> colliders;
+        private List<ICollider> _colliders;
         private ITerrain[][] _tiles;
 
         public GamePlay()
@@ -28,8 +27,8 @@ namespace MonoGame_Template.Scenes.GamePlay
 
         public void Initialize()
         {
-            colliders = new List<ICollider>();
-            _player = new MonoGame_Template.Scenes.GamePlay.Player.Player();
+            _colliders = new List<ICollider>();
+            _player = new Player.Player();
 
             int[][] tilemap = {
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -38,8 +37,8 @@ namespace MonoGame_Template.Scenes.GamePlay
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
             };
 
@@ -53,8 +52,8 @@ namespace MonoGame_Template.Scenes.GamePlay
                 .Cast<ICollider>()
                 .ToArray();
 
-            colliders.Add(_player);
-            colliders.AddRange(tilesFlatList);
+            _colliders.Add(_player);
+            _colliders.AddRange(tilesFlatList);
         }
 
         public void LoadContent(ContentManager content)
@@ -75,20 +74,26 @@ namespace MonoGame_Template.Scenes.GamePlay
 
         public void Update(GameTime gameTime)
         {
-            _player.Update(gameTime);
-
-            foreach (ICollider collider in colliders)
+            foreach (ICollider collider in _colliders)
             {
+                var newVelocity = new Vector2(collider.Velocity.X, collider.Velocity.Y);
                 if (collider is IGravity gravity && !gravity.IsGrounded)
                 {
-                    var velocityY = collider.Velocity.Y + 1;
-                    collider.Velocity = new Vector2(collider.Velocity.X, velocityY);
+                    newVelocity.Y = collider.Velocity.Y + 1;
                 }
 
-                collider.IsColliding(colliders);
+                if (collider.MovementAllowed(newVelocity, _colliders))
+                {
+                    collider.Velocity = newVelocity;
+                }
+                else
+                {
+                    collider.Velocity = new Vector2();
+
+                }
             }
 
-            
+            _player.Update(gameTime);
 
         }
 
@@ -97,9 +102,7 @@ namespace MonoGame_Template.Scenes.GamePlay
             Main.Graphics.GraphicsDevice.Clear(Color.LightSkyBlue);
 
             Main.SpriteBatch.Begin();
-
-            _player.Draw(gameTime);
-
+            
             // Draw Terrain
             TileMapManager.Draw(Main.SpriteBatch);
 
@@ -107,6 +110,8 @@ namespace MonoGame_Template.Scenes.GamePlay
             {
                 Main.SpriteBatch.Draw(tile.CurrentTexture, tile.Position, Color.White);
             }
+
+            _player.Draw(gameTime);
 
             Main.SpriteBatch.End();
         }

@@ -9,6 +9,6 @@ namespace MonoGame_Template.Common.Interfaces
         Vector2 Velocity { get; set; }
         Vector2 MaxVelocity { get; set; }
         Texture2D CurrentTexture { get; set; }
-        void OnCollision(ICollider collider);
+        //void OnCollision(ICollider collider);
     }
 }

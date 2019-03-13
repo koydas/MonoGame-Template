@@ -45,6 +45,7 @@
     <Compile Include="Common\Helpers\Enum\CollisionSide.cs" />
     <Compile Include="Common\Helpers\InputHelper.cs" />
     <Compile Include="Common\Helpers\MathExtensions.cs" />
+    <Compile Include="Common\Helpers\TextureHelper.cs" />
     <Compile Include="Common\Helpers\TileMapManager.cs" />
     <Compile Include="Common\Interfaces\ICollider.cs" />
     <Compile Include="Common\Interfaces\IGravity.cs" />
