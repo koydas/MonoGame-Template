@@ -13,39 +13,23 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
 {
     public class Player: ICollider, IGravity
     {
-        public Vector2 Position { get; set; }
+        public Vector2 Position { get; set; } = new Vector2(32, 32);
         public Vector2 Velocity { get; set; }
-        public Vector2 MaxVelocity { get; set; }
+        public Vector2 MaxVelocity { get; set; } = new Vector2(-4, -10);
         public Texture2D CurrentTexture { get; set; }
         public bool IsGrounded { get; set; }
 
 
         private int _currentFrame;
-        private readonly List<Texture2D> _idle;
-        private List<Texture2D> _walk;
+        private List<Texture2D> _idle = new List<Texture2D>();
+        private List<Texture2D> _walk = new List<Texture2D>();
 
         private double _oldGameTime;
-        private bool _faceRight;
-        private readonly float _movementSpeed;
-        private readonly int _jumpForce;
-        private PlayerState _playerState;
+        private bool _faceRight = true;
+        private const float _movementSpeed = 0.05f;
+        private const int _jumpForce = 10;
+        private PlayerState _playerState = PlayerState.Idle;
         private TimeSpan lastJumpTime;
-
-
-        public Player()
-        {
-            _idle = new List<Texture2D>();
-            _walk = new List<Texture2D>();
-
-            Position = new Vector2(32, 32);
-            //Position = new Vector2(32, Main.WindowHeight - 32);
-            _faceRight = true;
-
-            _movementSpeed =  0.05f;
-            _jumpForce = 1;
-            MaxVelocity = new Vector2(-4, -10);
-            _playerState = PlayerState.Idle;
-        }
 
         public void LoadContent(ContentManager content)
         {
@@ -58,71 +42,114 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
             _walk.Add(content.Load<Texture2D>("images/player__Walk_3"));
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, List<ICollider> colliders)
         {
             var deltaTime = gameTime.ElapsedGameTime.Milliseconds;
+
+            ApplyGravity(colliders, deltaTime);
+            Move(colliders, deltaTime);
+            Jump(colliders, gameTime, deltaTime);
+            
+            var clampedVelocity = Vector2.Clamp(Velocity, MaxVelocity, new Vector2(Math.Abs(MaxVelocity.X), Math.Abs(MaxVelocity.Y)));
+            Position += clampedVelocity;
+        }
+
+        private void Jump(List<ICollider> colliders, GameTime gameTime, int deltaTime)
+        {
             var keyboardState = Keyboard.GetState();
 
-            var velocityX = Velocity.X;
-            var velocityY = Velocity.Y;
-
-            if (keyboardState.IsKeyDown(Keys.Right) && Position.X < Main.WindowWidth - 32)
+            float velocityY = Velocity.Y;
+            if (keyboardState.IsKeyDown(Keys.Up) && IsGrounded && Math.Abs((lastJumpTime - gameTime.TotalGameTime).TotalSeconds) > 0.25)
             {
-                if (velocityX < 0)
-                {
-                    velocityX = 0;
-                    _currentFrame = 0;
-                }
-
-                velocityX += _movementSpeed * deltaTime;
-                _faceRight = true;
-            }
-
-            if (keyboardState.IsKeyDown(Keys.Left))
-            {
-                if (Velocity.X > 0)
-                {
-                    velocityX = 0;
-                    _currentFrame = 0;
-                }
-
-                velocityX -= _movementSpeed * deltaTime;
-                _faceRight = false;
-            }
-
-            if (!keyboardState.IsKeyDown(Keys.Right) && !keyboardState.IsKeyDown(Keys.Left))
-            {
-                velocityX = 0;
-            }
-
-            if(keyboardState.IsKeyDown(Keys.Up) && IsGrounded && Math.Abs((lastJumpTime - gameTime.TotalGameTime).TotalSeconds) > 0.25)
-            {
-                lastJumpTime = gameTime.TotalGameTime;
                 velocityY -= _jumpForce * deltaTime;
-                IsGrounded = false;
+                var movement = new Vector2(0, velocityY);
+
+                if (this.MovementAllowed(movement, colliders, out var lastAllowedPosition))
+                {
+                    lastJumpTime = gameTime.TotalGameTime;
+
+                    IsGrounded = false;
+
+                    Velocity += movement;
+                }
+                else
+                {
+                    Velocity = new Vector2(Velocity.X, 0);
+                }
             }
             else
             {
                 IsGrounded = false;
             }
 
-            Velocity = new Vector2(velocityX, velocityY);
-            var clampedVelocity = Vector2.Clamp(Velocity, MaxVelocity, new Vector2(Math.Abs(MaxVelocity.X), Math.Abs(MaxVelocity.Y)));
-            
-            _playerState = velocityX != 0 
-                ? PlayerState.Walk 
-                : PlayerState.Idle;
+        }
 
-            Position += clampedVelocity;
-            
+        private void Move(List<ICollider> colliders, int deltaTime)
+        {
+            var keyboardState = Keyboard.GetState();
 
-            if (Position.X < 0)
+            var velocityX = Velocity.X;
+
+            bool moving = false;
+
+            if (keyboardState.IsKeyDown(Keys.Right) && Position.X < Main.WindowWidth - 32)
             {
-                Position = new Vector2(0, Position.Y);
+                velocityX += _movementSpeed * deltaTime;
+                if (this.MovementAllowed(new Vector2(velocityX, 0), colliders, out var collisionRectangle))
+                {
+                    _faceRight = true;
+                    moving = true;
+                }
+                else
+                {
+                    velocityX = 0;
+
+                }
             }
-            else if (Position.X  > Main.WindowWidth - 64)
+            
+            if (keyboardState.IsKeyDown(Keys.Left))
             {
-                Position = new Vector2(Main.WindowWidth - 64, Position.Y);
+                velocityX -= _movementSpeed * deltaTime;
+
+                if (this.MovementAllowed(new Vector2(velocityX, 0), colliders, out var collisionRectangle))
+                {
+                    _faceRight = false;
+                    moving = true;
+                }
+                else
+                {
+                    velocityX = 0;
+                }
+            }
+
+            if (moving && !(keyboardState.IsKeyDown(Keys.Right) && keyboardState.IsKeyDown(Keys.Left)))
+            {
+                Velocity += new Vector2(velocityX, 0);
+            }
+            else
+            {
+                Velocity = new Vector2(0, Velocity.Y);
+            }
+        }
+
+        private void ApplyGravity(List<ICollider> colliders, int deltaTime)
+        {
+            var gravityVelocity = new Vector2(0, GamePlay.GravityForce);
+
+            if (this.MovementAllowed(gravityVelocity, colliders, out var lastAllowedValue))
+            {
+                Velocity += gravityVelocity * deltaTime;
+            }
+            else
+            {
+                Velocity = new Vector2(Velocity.X, 0);
+
+                if (lastAllowedValue != null)
+                {
+                    Position = new Vector2(Position.X, lastAllowedValue.Value.Top - 64); // todo : on devrait utiliser la hauteur du collider
+                }
+
+                IsGrounded = true;
             }
         }
 
@@ -155,45 +182,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
                     layerDepth: 1);
             }
         }
-
-        //public void OnCollision(ICollider collider)
-        //{
-        //    var collisionType = this.GetCollisionType(collider);
-
-        //    var velocity = new Vector2(Velocity.X, Velocity.Y);
-        //    var position = new Vector2(Position.X, Position.Y);
-
-        //    if (collisionType == CollisionSide.Bottom)
-        //    {
-        //        IsGrounded = true;
-        //        velocity.Y = 0;
-        //        position.Y = collider.Position.Y - collider.CurrentTexture.Height;
-        //    }
-
-        //    if (collisionType == CollisionSide.Top)
-        //    {
-        //        velocity.Y = 0;
-        //        position.Y = collider.GetRect().Bottom + collider.GetRect().Height;
-        //    }
-
-        //    if (collisionType == CollisionSide.Left)
-        //    {
-        //        velocity.X = 0;
-        //        position.X = collider.GetRect().Right;
-        //    }
-
-        //    if (collisionType == CollisionSide.Right)
-        //    {
-        //        velocity.X = 0;
-        //        position.X = collider.GetRect().Left - CurrentTexture.Width;
-        //    }
-            
-        //    var clampedVelocity = Vector2.Clamp(velocity, MaxVelocity, new Vector2(Math.Abs(MaxVelocity.X), Math.Abs(MaxVelocity.Y)));
-
-        //    Velocity = clampedVelocity;
-        //    Position = position;
-        //}
-
+        
         private Texture2D Animate(List<Texture2D> textureList, GameTime gameTime)
         {
             if (gameTime.TotalGameTime.TotalSeconds - _oldGameTime > 0.3)
@@ -207,7 +196,5 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
 
             return CurrentTexture;
         }
-
-        
     }
 }

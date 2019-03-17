@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Scenes.GamePlay.Player;
@@ -7,26 +8,25 @@ namespace MonoGame_Template.Common.Helpers
 {
     public static class CollisionManager
     {
-        public static bool MovementAllowed(this ICollider mainCollider, Vector2 movement, IEnumerable<ICollider> colliders)
+        public static bool MovementAllowed(this ICollider mainCollider, Vector2 movement, IEnumerable<ICollider> colliders, out Rectangle? collisionRectangle)
         {
-            var anticipatedCollider = new Player() as ICollider;
+            collisionRectangle = null;
+            var texture = mainCollider.CurrentTexture;
+            var anticipatedPosition = mainCollider.Position + movement;
 
-            anticipatedCollider.CurrentTexture = mainCollider.CurrentTexture;
-            anticipatedCollider.Position = new Vector2
-            {
-                X = mainCollider.Position.X + movement.X,
-                Y = mainCollider.Position.Y + movement.Y
-            };
+            Rectangle rect = new Rectangle((int)anticipatedPosition.X, (int)anticipatedPosition.Y, texture.Width, texture.Height);
 
-            foreach (var collider in colliders)
+            foreach (var collider in colliders.Where(x => !(x is Player)))
             {
                 if (collider?.Position == null || collider?.CurrentTexture == null && mainCollider.Equals(collider))
                 {
                     continue;
                 }
 
-                if (anticipatedCollider.Intersects(collider))
+                if (rect.Intersects(collider.GetRect()))
                 {
+                    collisionRectangle = Rectangle.Intersect(rect, collider.GetRect());
+
                     return false;
                 }
             }

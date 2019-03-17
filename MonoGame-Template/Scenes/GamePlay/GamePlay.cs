@@ -13,8 +13,8 @@ namespace MonoGame_Template.Scenes.GamePlay
     public class GamePlay : IScene
     {
         public List<Texture2D> idle;
-
-        private MonoGame_Template.Scenes.GamePlay.Player.Player _player;
+        public readonly static float GravityForce = 1;
+        private Player.Player _player;
 
         private List<ICollider> _colliders;
         private ITerrain[][] _tiles;
@@ -74,26 +74,27 @@ namespace MonoGame_Template.Scenes.GamePlay
 
         public void Update(GameTime gameTime)
         {
-            foreach (ICollider collider in _colliders)
-            {
-                var newVelocity = new Vector2(collider.Velocity.X, collider.Velocity.Y);
-                if (collider is IGravity gravity && !gravity.IsGrounded)
-                {
-                    newVelocity.Y = collider.Velocity.Y + 1;
-                }
+            //foreach (ICollider collider in _colliders)
+            //{
+            //    var newVelocity = new Vector2(collider.Velocity.X, collider.Velocity.Y);
+            //    if (collider is IGravity gravity && !gravity.IsGrounded)
+            //    {
+            //        newVelocity.Y = collider.Velocity.Y + 1;
 
-                if (collider.MovementAllowed(newVelocity, _colliders))
-                {
-                    collider.Velocity = newVelocity;
-                }
-                else
-                {
-                    collider.Velocity = new Vector2();
-                }
-            }
+            //        if (collider.MovementAllowed(newVelocity, _colliders))
+            //        {
+            //            collider.Velocity = newVelocity;
+            //        }
+            //        else
+            //        {
+            //            collider.Velocity = new Vector2();
+            //        }
+            //    }
+            //}
 
-            _player.Update(gameTime);
+            _player.Update(gameTime,_colliders);
 
+            
         }
 
         public void Draw(GameTime gameTime)
