@@ -3,9 +3,11 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame_Template.Common.Helpers;
 using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.Interfaces;
+using MonoGame_Template.Scenes.GamePlay.Terrain.Enums;
 using MonoGame_Template.Scenes.GamePlay.Terrain.Interfaces;
 
 namespace MonoGame_Template.Scenes.GamePlay
@@ -18,12 +20,15 @@ namespace MonoGame_Template.Scenes.GamePlay
 
         private List<ICollider> _colliders;
         private ITerrain[][] _tiles;
+        public static TerrainType[][] TilemapEnum;
 
         public GamePlay()
         {
             Initialize();
             LoadContent(Main.ContentManager);
         }
+
+        public static int TileSize = 64;
 
         public void Initialize()
         {
@@ -36,14 +41,14 @@ namespace MonoGame_Template.Scenes.GamePlay
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                new [] {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                new [] {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                new [] {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
                 new [] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
             };
 
-            var tilemapenum = tilemap.ToEnum();
-            _tiles = TileMapManager.Generate(tilemapenum);
+            TilemapEnum = tilemap.ToEnum();
+            _tiles = TileMapManager.Generate(TilemapEnum, TileSize);
 
 
             var tilesFlatList = _tiles
@@ -74,6 +79,14 @@ namespace MonoGame_Template.Scenes.GamePlay
 
         public void Update(GameTime gameTime)
         {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyPressed(Keys.Escape))
+            {
+                Main.CurrentScene = new Menu.Menu();
+                Main.CurrentScene.Initialize();
+                Main.CurrentScene.LoadContent(Main.ContentManager);
+            }
+
             //foreach (ICollider collider in _colliders)
             //{
             //    var newVelocity = new Vector2(collider.Velocity.X, collider.Velocity.Y);

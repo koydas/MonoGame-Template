@@ -33,50 +33,7 @@ namespace MonoGame_Template.Common.Helpers
 
             return true;
         }
-
-        //public static bool IsColliding(this ICollider mainCollider, IEnumerable<ICollider> colliders)
-        //{
-        //    foreach (var collider in colliders)
-        //    {
-        //        if (collider?.Position == null || collider?.CurrentTexture == null)
-        //        {
-        //            continue;
-        //        }
-
-        //        if (mainCollider.Intersects(collider))
-        //        {
-        //            mainCollider.OnCollision(collider);
-        //            collider.OnCollision(mainCollider);
-        //        }
-        //    }
-
-        //    return true;
-        //}
-
-        //public static CollisionSide? GetCollisionType(this ICollider mainCollider, ICollider secondaryCollider)
-        //{
-        //    var main = mainCollider.GetRect();
-        //    var secondary = secondaryCollider.GetRect();
-
-        //    var intersect = Rectangle.Intersect(main, secondary);
-
-        //    if (intersect.Height < intersect.Width)
-        //    {
-        //        return main.Center.Y > secondary.Center.Y 
-        //            ? CollisionSide.Top 
-        //            : CollisionSide.Bottom;
-        //    }
-
-        //    if (main.Center.Y < secondary.Center.Y)
-        //    {
-        //        return main.Center.X < secondary.Center.X 
-        //            ? CollisionSide.Left 
-        //            : CollisionSide.Right;
-        //    }
-
-        //    return null;
-        //}
-
+        
         public static bool Intersects(this ICollider mainCollider, ICollider secondaryCollider)
         {
             if (mainCollider.Equals(secondaryCollider))

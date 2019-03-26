@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/perso/MonoGame-Template/MonoGame-Template/Content/Images/sun.png</SourceFile>
-  <SourceTime>2019-03-12T12:39:14.2174853-04:00</SourceTime>
-  <DestFile>C:/perso/MonoGame-Template/MonoGame-Template/Content/bin/Windows/Content/Images/sun.xnb</DestFile>
-  <DestTime>2019-03-13T07:38:21.6416243-04:00</DestTime>
+  <SourceFile>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/sun.png</SourceFile>
+  <SourceTime>2019-03-07T19:56:31.1509755-05:00</SourceTime>
+  <DestFile>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/bin/Windows/Content/Images/sun.xnb</DestFile>
+  <DestTime>2019-03-23T19:35:05.6826427-04:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2018-12-08T11:35:54-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

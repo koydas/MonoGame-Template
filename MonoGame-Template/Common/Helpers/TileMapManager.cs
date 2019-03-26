@@ -30,7 +30,7 @@ namespace MonoGame_Template.Common.Helpers
             return list.ToArray();
         }
 
-        public static ITerrain[][] Generate(TerrainType[][] tileMap)
+        public static ITerrain[][] Generate(TerrainType[][] tileMap, int tileSize)
         {
             var list = new List<ITerrain[]>();
 
@@ -57,10 +57,10 @@ namespace MonoGame_Template.Common.Helpers
                         }
                     }
 
-                    tilePosition.X += 64;
+                    tilePosition.X += tileSize;
                 }
 
-                tilePosition.Y += 64;
+                tilePosition.Y += tileSize;
 
                 list.Add(secondList.ToArray());
             }

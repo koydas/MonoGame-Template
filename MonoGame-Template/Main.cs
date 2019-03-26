@@ -65,9 +65,9 @@ namespace MonoGame_Template
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+            //    Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //    Exit();
 
             Main.GameTime = gameTime;
 

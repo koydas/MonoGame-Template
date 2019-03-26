@@ -37,6 +37,12 @@ namespace MonoGame_Template.Scenes.Menu
 
         public void Update(GameTime gameTime)
         {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyPressed(Keys.Escape))
+            {
+                Main.Self.Exit();
+            }
+
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyPressed(Keys.Down) || keyboardState.IsKeyPressed(Keys.Up))
