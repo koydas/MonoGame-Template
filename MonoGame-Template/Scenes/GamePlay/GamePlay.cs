@@ -91,22 +91,14 @@ namespace MonoGame_Template.Scenes.GamePlay
 
             _player.Update(gameTime,_colliders);
 
-            if (_player.Position.X > Main.WindowWidth/2)
-            {
-                _camera.Position = new Vector2(_player.Position.X, Main.WindowHeight / 2);
-
-            }
-            else
-            {
-                _camera.Position = new Vector2(Main.WindowWidth / 2, Main.WindowHeight / 2);
-            }
+            _camera.Position = _player.Position.X > Main.WindowWidth / 2 
+                ? new Vector2(_player.Position.X, Main.WindowHeight / 2) 
+                : new Vector2(Main.WindowWidth / 2, Main.WindowHeight / 2);
         }
 
         public void Draw(GameTime gameTime)
         {
             Main.Graphics.GraphicsDevice.Clear(Color.LightSkyBlue);
-
-            //Main.SpriteBatch.Begin();
 
             Main.SpriteBatch.Begin(SpriteSortMode.BackToFront,
                 BlendState.AlphaBlend,
@@ -114,7 +106,7 @@ namespace MonoGame_Template.Scenes.GamePlay
                 null,
                 null,
                 null,
-                _camera.GetTransformation(Main.Graphics.GraphicsDevice /*Send the variable that has your graphic device here*/));
+                _camera.GetTransformation(Main.Graphics.GraphicsDevice));
 
             // Draw Terrain
             TileMapManager.Draw(Main.SpriteBatch);
