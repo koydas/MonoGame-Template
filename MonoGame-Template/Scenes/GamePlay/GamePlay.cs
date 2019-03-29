@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Template.Common;
 using MonoGame_Template.Common.Helpers;
 using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.Interfaces;
@@ -17,7 +18,7 @@ namespace MonoGame_Template.Scenes.GamePlay
         public List<Texture2D> idle;
         public readonly static float GravityForce = 1;
         private Player.Player _player;
-
+        private Camera2D _camera;
         private List<ICollider> _colliders;
         private ITerrain[][] _tiles;
         public static TerrainType[][] TilemapEnum;
@@ -26,6 +27,7 @@ namespace MonoGame_Template.Scenes.GamePlay
         {
             Initialize();
             LoadContent(Main.ContentManager);
+            _camera = new Camera2D();
         }
 
         public static int TileSize = 64;
@@ -87,35 +89,33 @@ namespace MonoGame_Template.Scenes.GamePlay
                 Main.CurrentScene.LoadContent(Main.ContentManager);
             }
 
-            //foreach (ICollider collider in _colliders)
-            //{
-            //    var newVelocity = new Vector2(collider.Velocity.X, collider.Velocity.Y);
-            //    if (collider is IGravity gravity && !gravity.IsGrounded)
-            //    {
-            //        newVelocity.Y = collider.Velocity.Y + 1;
-
-            //        if (collider.MovementAllowed(newVelocity, _colliders))
-            //        {
-            //            collider.Velocity = newVelocity;
-            //        }
-            //        else
-            //        {
-            //            collider.Velocity = new Vector2();
-            //        }
-            //    }
-            //}
-
             _player.Update(gameTime,_colliders);
 
-            
+            if (_player.Position.X > Main.WindowWidth/2)
+            {
+                _camera.Position = new Vector2(_player.Position.X, Main.WindowHeight / 2);
+
+            }
+            else
+            {
+                _camera.Position = new Vector2(Main.WindowWidth / 2, Main.WindowHeight / 2);
+            }
         }
 
         public void Draw(GameTime gameTime)
         {
             Main.Graphics.GraphicsDevice.Clear(Color.LightSkyBlue);
 
-            Main.SpriteBatch.Begin();
-            
+            //Main.SpriteBatch.Begin();
+
+            Main.SpriteBatch.Begin(SpriteSortMode.BackToFront,
+                BlendState.AlphaBlend,
+                null,
+                null,
+                null,
+                null,
+                _camera.GetTransformation(Main.Graphics.GraphicsDevice /*Send the variable that has your graphic device here*/));
+
             // Draw Terrain
             TileMapManager.Draw(Main.SpriteBatch);
 
