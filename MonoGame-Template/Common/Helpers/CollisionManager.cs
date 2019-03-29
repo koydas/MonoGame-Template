@@ -33,7 +33,12 @@ namespace MonoGame_Template.Common.Helpers
 
             return true;
         }
-        
+
+        public static bool IsVertical(Rectangle collisionRectangle)
+        {
+            return collisionRectangle.Height < collisionRectangle.Width;
+        }
+
         public static bool Intersects(this ICollider mainCollider, ICollider secondaryCollider)
         {
             if (mainCollider.Equals(secondaryCollider))

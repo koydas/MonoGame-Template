@@ -62,11 +62,17 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
             if (IsGrounded && keyboardState.IsKeyPressed(Keys.Up))
             {
                 var movement = new Vector2(Velocity.X, -_jumpForce*deltaTime);
-                if (this.MovementAllowed(movement, colliders, out var collisionRectangle))
-                {
-                    Velocity += movement;
-                    IsGrounded = false;
-                }
+        
+                // Jump
+                Velocity += movement;
+                IsGrounded = false;                
+            }
+
+            // If we hit something
+            if (!this.MovementAllowed(Vector2.Zero, colliders, out var collisionRectangle) && collisionRectangle != null && CollisionManager.IsVertical(collisionRectangle.Value) && collisionRectangle.Value.Bottom > Position.Y)
+            {
+                Velocity = new Vector2(Velocity.X, 0);
+                Position = new Vector2(Position.X, collisionRectangle.Value.Bottom);
             }
         }
 
@@ -107,7 +113,8 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
 
                     return true;
                 }
-                else
+
+                if (collisionRectangle != null && !CollisionManager.IsVertical(collisionRectangle.Value))
                 {
                     var x = Position.X;
                     switch (keypressed)
@@ -120,7 +127,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
                             break;
                     }
 
-                    //Position = new Vector2(x, Position.Y);
+                    Position = new Vector2(x, Position.Y);
                 }
             }
             
@@ -136,7 +143,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
                 Velocity += gravityVelocity * deltaTime;
                 IsGrounded = false;
             }
-            else
+            else if (collisionRectangle != null && CollisionManager.IsVertical(collisionRectangle.Value))
             {
                 IsGrounded = true;
                 Velocity = new Vector2(Velocity.X, 0);
