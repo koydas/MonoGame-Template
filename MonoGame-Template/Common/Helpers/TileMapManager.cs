@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame_Template.Common.Scenes.GamePlay.Terrain;
 using MonoGame_Template.Scenes.GamePlay.Terrain;
 using MonoGame_Template.Scenes.GamePlay.Terrain.Enums;
 using MonoGame_Template.Scenes.GamePlay.Terrain.Interfaces;

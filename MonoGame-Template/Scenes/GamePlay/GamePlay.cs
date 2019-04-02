@@ -10,6 +10,7 @@ using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.Interfaces;
 using MonoGame_Template.Scenes.GamePlay.Terrain.Enums;
 using MonoGame_Template.Scenes.GamePlay.Terrain.Interfaces;
+using tainicom.Aether.Physics2D.Dynamics;
 
 namespace MonoGame_Template.Scenes.GamePlay
 {
@@ -22,6 +23,7 @@ namespace MonoGame_Template.Scenes.GamePlay
         private List<ICollider> _colliders;
         private ITerrain[][] _tiles;
         public static TerrainType[][] TilemapEnum;
+        public static World World = new World(Vector2.UnitY * 9.7f);
 
         public GamePlay()
         {
@@ -81,6 +83,8 @@ namespace MonoGame_Template.Scenes.GamePlay
 
         public void Update(GameTime gameTime)
         {
+            var deltaTime = gameTime.ElapsedGameTime.Milliseconds;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyPressed(Keys.Escape))
             {
@@ -88,6 +92,8 @@ namespace MonoGame_Template.Scenes.GamePlay
                 Main.CurrentScene.Initialize();
                 Main.CurrentScene.LoadContent(Main.ContentManager);
             }
+
+            World.Step(deltaTime);
 
             _player.Update(gameTime,_colliders);
 

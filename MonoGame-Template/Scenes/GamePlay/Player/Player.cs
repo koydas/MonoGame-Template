@@ -8,6 +8,7 @@ using MonoGame_Template.Common.Helpers;
 using MonoGame_Template.Common.Helpers.Enum;
 using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.GamePlay.Player;
+using tainicom.Aether.Physics2D.Dynamics;
 
 namespace MonoGame_Template.Scenes.GamePlay.Player
 {
@@ -29,7 +30,19 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
         private const float _movementSpeed = 0.05f;
         private const int _jumpForce = 10;
         private PlayerState _playerState = PlayerState.Idle;
+
+        private Body box;
+
         //private TimeSpan lastJumpTime;
+
+        public Player()
+        {
+            box = GamePlay.World.CreateRectangle(64, 64, 1f, Position);
+            box.BodyType = BodyType.Dynamic;
+            box.FixedRotation = true;
+            box.SetRestitution(0.3f);
+            box.SetFriction(0.5f);
+        }
 
         public void LoadContent(ContentManager content)
         {
@@ -44,15 +57,22 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
 
         public void Update(GameTime gameTime, List<ICollider> colliders)
         {
-            var deltaTime = gameTime.ElapsedGameTime.Milliseconds;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+                box.ApplyForce(Vector2.UnitX);
+            }
+
+            //var deltaTime = gameTime.ElapsedGameTime.Milliseconds;
             
-            MoveLogic(colliders, deltaTime);
-            ApplyGravity(colliders, deltaTime);
-            Jump(colliders, gameTime, deltaTime);
+            //MoveLogic(colliders, deltaTime);
+            //ApplyGravity(colliders, deltaTime);
+            //Jump(colliders, gameTime, deltaTime);
             
 
-            var clampedVelocity = Vector2.Clamp(Velocity, MaxVelocity, new Vector2(Math.Abs(MaxVelocity.X), Math.Abs(MaxVelocity.Y)));
-            Position += clampedVelocity;
+            //var clampedVelocity = Vector2.Clamp(Velocity, MaxVelocity, new Vector2(Math.Abs(MaxVelocity.X), Math.Abs(MaxVelocity.Y)));
+            //Position += clampedVelocity;
+            Position = box.Position;
         }
 
         private void Jump(List<ICollider> colliders, GameTime gameTime, int deltaTime)
