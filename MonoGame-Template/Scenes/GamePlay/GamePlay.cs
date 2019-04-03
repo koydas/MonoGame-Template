@@ -16,14 +16,12 @@ namespace MonoGame_Template.Scenes.GamePlay
 {
     public class GamePlay : IScene
     {
-        public List<Texture2D> idle;
-        public readonly static float GravityForce = 1;
         private Player.Player _player;
-        private Camera2D _camera;
+        private readonly Camera2D _camera;
         private List<ICollider> _colliders;
         private ITerrain[][] _tiles;
         public static TerrainType[][] TilemapEnum;
-        public static World World = new World(Vector2.UnitY * 9.7f);
+        public static World World = new World(Vector2.Zero);
 
         public GamePlay()
         {
@@ -46,23 +44,13 @@ namespace MonoGame_Template.Scenes.GamePlay
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                new [] {1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                new [] {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
                 new [] {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
                 new [] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
             };
 
             TilemapEnum = tilemap.ToEnum();
             _tiles = TileMapManager.Generate(TilemapEnum, TileSize);
-
-
-            var tilesFlatList = _tiles
-                .SelectMany(x => x.Select(y => y))
-                .Where(x => x is ICollider)
-                .Cast<ICollider>()
-                .ToArray();
-
-            _colliders.Add(_player);
-            _colliders.AddRange(tilesFlatList);
         }
 
         public void LoadContent(ContentManager content)
@@ -97,8 +85,8 @@ namespace MonoGame_Template.Scenes.GamePlay
 
             _player.Update(gameTime,_colliders);
 
-            _camera.Position = _player.Position.X > Main.WindowWidth / 2 
-                ? new Vector2(_player.Position.X, Main.WindowHeight / 2) 
+            _camera.Position = _player.Body.Position.X*64 > Main.WindowWidth / 2 
+                ? new Vector2(_player.Body.Position.X*64, Main.WindowHeight / 2) 
                 : new Vector2(Main.WindowWidth / 2, Main.WindowHeight / 2);
         }
 

@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame_Template.Common.Helpers;
-using MonoGame_Template.Common.Helpers.Enum;
 using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.GamePlay.Player;
 using tainicom.Aether.Physics2D.Dynamics;
 
 namespace MonoGame_Template.Scenes.GamePlay.Player
 {
-    public class Player: ICollider, IGravity
+    public class Player
     {
-        public Vector2 Position { get; set; } = new Vector2(32, 32);
-        public Vector2 Velocity { get; set; }
-        public Vector2 MaxVelocity { get; set; } = new Vector2(-4, -10);
         public Texture2D CurrentTexture { get; set; }
         public bool IsGrounded { get; set; }
-
 
         private int _currentFrame;
         private List<Texture2D> _idle = new List<Texture2D>();
@@ -27,21 +20,21 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
 
         private double _oldGameTime;
         private bool _faceRight = true;
-        private const float _movementSpeed = 0.05f;
-        private const int _jumpForce = 10;
+        private const float MovementSpeed = 0.0005f;
+        private const float JumpForce = 0.003f;
         private PlayerState _playerState = PlayerState.Idle;
 
-        private Body box;
-
-        //private TimeSpan lastJumpTime;
+        public Body Body;
 
         public Player()
         {
-            box = GamePlay.World.CreateRectangle(64, 64, 1f, Position);
-            box.BodyType = BodyType.Dynamic;
-            box.FixedRotation = true;
-            box.SetRestitution(0.3f);
-            box.SetFriction(0.5f);
+            Body = GamePlay.World.CreateRectangle(1, 1, 1f, new Vector2(0,0));
+            Body.SetFriction(0.2f);
+            Body.SetRestitution(0.2f);
+            
+            Body.BodyType = BodyType.Dynamic;
+
+            Body.OnCollision += (sender, other, contact) => IsGrounded = true;
         }
 
         public void LoadContent(ContentManager content)
@@ -57,117 +50,41 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
 
         public void Update(GameTime gameTime, List<ICollider> colliders)
         {
+            Body.ApplyForce(Vector2.UnitY * 0.0005f);
+
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                box.ApplyForce(Vector2.UnitX);
-            }
-
-            //var deltaTime = gameTime.ElapsedGameTime.Milliseconds;
-            
-            //MoveLogic(colliders, deltaTime);
-            //ApplyGravity(colliders, deltaTime);
-            //Jump(colliders, gameTime, deltaTime);
-            
-
-            //var clampedVelocity = Vector2.Clamp(Velocity, MaxVelocity, new Vector2(Math.Abs(MaxVelocity.X), Math.Abs(MaxVelocity.Y)));
-            //Position += clampedVelocity;
-            Position = box.Position;
-        }
-
-        private void Jump(List<ICollider> colliders, GameTime gameTime, int deltaTime)
-        {
-            var keyboardState = Keyboard.GetState();
-
-            if (IsGrounded && keyboardState.IsKeyPressed(Keys.Up))
-            {
-                var movement = new Vector2(Velocity.X, -_jumpForce*deltaTime);
-        
-                // Jump
-                Velocity += movement;
-                IsGrounded = false;                
-            }
-
-            // If we hit something
-            if (!this.MovementAllowed(Vector2.Zero, colliders, out var collisionRectangle) && collisionRectangle != null && CollisionManager.IsVertical(collisionRectangle.Value) && collisionRectangle.Value.Bottom > Position.Y)
-            {
-                Velocity = new Vector2(Velocity.X, 0);
-                Position = new Vector2(Position.X, collisionRectangle.Value.Bottom);
-            }
-        }
-
-        private void MoveLogic(List<ICollider> colliders, int deltaTime)
-        {
-            if (Move(Keys.Right, colliders) == Move(Keys.Left, colliders))
-            {
-                Velocity = new Vector2(0, Velocity.Y);
-            }
-        }
-
-        private bool Move(Keys keypressed, List<ICollider> colliders)
-        {
-            Vector2 movement;
-            bool insideScreen;
-            switch (keypressed)
-            {
-                case Keys.Right:
-                    movement = new Vector2(1, 0);
-                    insideScreen = Position.X < Main.WindowWidth - CurrentTexture.Width;
-                    break;
-                case Keys.Left:
-                    movement = new Vector2(-1, 0);
-                    insideScreen = Position.X > 0;
-                    break;
-                default:
-                    throw new NotImplementedException("Unsupported key");
-            }
-            
-            var keyboardState = Keyboard.GetState();
-
-            if (keyboardState.IsKeyDown(keypressed) && insideScreen)
-            {
-                if (this.MovementAllowed(movement, colliders, out var collisionRectangle))
+                if (Body.LinearVelocity.X < MovementSpeed)
                 {
-                    Velocity += movement;
-                    _faceRight = Velocity.X >= 0;
-
-                    return true;
-                }
-
-                if (collisionRectangle != null && !CollisionManager.IsVertical(collisionRectangle.Value))
-                {
-                    var x = Position.X;
-                    switch (keypressed)
-                    {
-                        case Keys.Right:
-                            x = collisionRectangle.Value.Left - CurrentTexture.Width;
-                            break;
-                        case Keys.Left:
-                            x = collisionRectangle.Value.Right;
-                            break;
-                    }
-
-                    Position = new Vector2(x, Position.Y);
+                    Body.ApplyForce(Vector2.UnitX * MovementSpeed);
+                    _faceRight = true;
                 }
             }
-            
-            return false;
-        }
 
-        private void ApplyGravity(List<ICollider> colliders, int deltaTime)
-        {
-            var gravityVelocity = new Vector2(0, GamePlay.GravityForce);
-
-            if (this.MovementAllowed(gravityVelocity, colliders, out var collisionRectangle))
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                Velocity += gravityVelocity * deltaTime;
+                if (Body.LinearVelocity.X > -MovementSpeed)
+                {
+                    Body.ApplyForce(Vector2.UnitX * -MovementSpeed);
+                    _faceRight = false;
+                }
+            }
+
+            if (IsGrounded && Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                if (Body.LinearVelocity.Y > -JumpForce)
+                {
+                    Body.ApplyForce(Vector2.UnitY * -JumpForce);
+                }
+
                 IsGrounded = false;
             }
-            else if (collisionRectangle != null && CollisionManager.IsVertical(collisionRectangle.Value))
+
+            // Avoid falling out of the screen
+            if (Body.Position.X * 64 < 0)
             {
-                IsGrounded = true;
-                Velocity = new Vector2(Velocity.X, 0);
-                Position = new Vector2(Position.X, collisionRectangle.Value.Top - CurrentTexture.Height);
+                Body.Position = new Vector2(0, Body.Position.Y);
             }
         }
 
@@ -190,7 +107,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
             {
                 Main.SpriteBatch.Draw(
                     texture: texture2D,
-                    position: Position,
+                    position: Body.Position * 64,
                     sourceRectangle: null,
                     color: Color.White,
                     rotation: 0f,

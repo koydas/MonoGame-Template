@@ -9,7 +9,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Terrain
 {
     public class Grass: ICollider, ITerrain
     {
-        private Body body;
+        public readonly Body Body;
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
         public Vector2 MaxVelocity { get; set; }
@@ -18,8 +18,8 @@ namespace MonoGame_Template.Scenes.GamePlay.Terrain
         public Grass(Vector2 position)
         {
             Position = position;
-            body = GamePlay.World.CreateRectangle(64, 64, 1f, Position);
-            body.BodyType = BodyType.Static;
+            Body = GamePlay.World.CreateRectangle(1, 1, 1f, Position / 64);
+            Body.BodyType = BodyType.Static;
         }
 
         public void LoadContent(ContentManager content)
