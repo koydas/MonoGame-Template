@@ -3,9 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Template.Common.Enums;
 using MonoGame_Template.Common.Helpers;
 using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.GamePlay.Player;
+using MonoGame_Template.Scenes.GamePlay.Player.Helpers;
 using tainicom.Aether.Physics2D.Dynamics;
 
 namespace MonoGame_Template.Scenes.GamePlay.Player
@@ -22,11 +24,12 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
         private readonly List<Texture2D> _walk = new List<Texture2D>();
 
         private double _oldGameTime;
-        private bool _faceRight = true;
-        private const float MovementSpeed = 0.0005f;
-        private const float JumpForce = 0.003f;
-        private PlayerState _playerState = PlayerState.Idle;
+        internal Direction Direction = Direction.Right;
         
+        private PlayerState _playerState = PlayerState.Idle;
+
+        internal float TeleportOpacity = 0;
+
         public Player()
         {
             Body = GamePlay.World.CreateRectangle(1, 1, 1f, new Vector2(0, 0));
@@ -50,41 +53,14 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
 
         public void Update(GameTime gameTime)
         {
-            Body.ApplyForce(Vector2.UnitY * 0.0005f);
-            
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                if (Body.LinearVelocity.X < MovementSpeed)
-                {
-                    Body.ApplyForce(Vector2.UnitX * MovementSpeed);
-                    _faceRight = true;
-                }
-            }
+            var deltaTime = gameTime.ElapsedGameTime.Milliseconds;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                if (Body.LinearVelocity.X > -MovementSpeed)
-                {
-                    Body.ApplyForce(Vector2.UnitX * -MovementSpeed);
-                    _faceRight = false;
-                }
-            }
+            if(this.Teleport(deltaTime))
+                return;
 
-            if (IsGrounded && Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                if (Body.LinearVelocity.Y > -JumpForce)
-                {
-                    Body.ApplyForce(Vector2.UnitY * -JumpForce);
-                }
-
-                IsGrounded = false;
-            }
-
-            // Avoid falling out of the screen
-            if (Body.Position.X.ToDisplayUnit() < 0)
-            {
-                Body.Position = new Vector2(0, Body.Position.Y);
-            }
+            this.ApplyGravity();
+            this.Move();
+            this.Jump();
         }
 
         public void Draw(GameTime gameTime)
@@ -104,19 +80,32 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
 
             if (texture2D != null)
             {
+                SpriteEffects effect;
+                switch (Direction)
+                {
+                    case Direction.Left:
+                        effect = SpriteEffects.FlipHorizontally;
+                        break;
+                    case Direction.Right:
+                        effect = SpriteEffects.None;
+                        break;
+                    default:
+                        throw new System.Exception("Unsupported Direction");
+                }
+
                 Main.SpriteBatch.Draw(
                     texture: texture2D,
                     position: Body.Position * 64,
                     sourceRectangle: null,
-                    color: Color.White,
+                    color: Color.White * TeleportOpacity,
                     rotation: 0f,
                     origin: Vector2.Zero,
                     scale: 1,
-                    effects: _faceRight ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
+                    effects: effect,
                     layerDepth: 1);
             }
         }
-        
+
         private Texture2D Animate(List<Texture2D> textureList, GameTime gameTime)
         {
             if (gameTime.TotalGameTime.TotalSeconds - _oldGameTime > 0.3)

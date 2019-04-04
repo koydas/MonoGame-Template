@@ -42,12 +42,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Common\Camera2D.cs" />
+    <Compile Include="Common\Enums\Direction.cs" />
     <Compile Include="Common\Helpers\ConvertUnits.cs" />
     <Compile Include="Common\Helpers\InputHelper.cs" />
     <Compile Include="Common\Helpers\MathExtensions.cs" />
     <Compile Include="Common\Helpers\TileMapManager.cs" />
     <Compile Include="Common\Interfaces\ICollider.cs" />
     <Compile Include="Scenes\GamePlay\Decor\Interfaces\IDecor.cs" />
+    <Compile Include="Scenes\GamePlay\Player\Helpers\PlayerMovement.cs" />
     <Compile Include="Scenes\GamePlay\Player\Player.cs" />
     <Compile Include="Scenes\GamePlay\GamePlay.cs" />
     <Compile Include="Scenes\GamePlay\Player\PlayerState.cs" />
@@ -85,9 +87,7 @@
     <None Include="Content\DiagnosticsFont.xnb" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Scenes\GamePlay\Player\Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

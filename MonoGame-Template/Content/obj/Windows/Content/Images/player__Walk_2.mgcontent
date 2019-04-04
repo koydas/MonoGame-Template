@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_2.png</SourceFile>
-  <SourceTime>2019-03-05T20:57:16.8066032-05:00</SourceTime>
-  <DestFile>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/bin/Windows/Content/Images/player__Walk_2.xnb</DestFile>
-  <DestTime>2019-04-03T13:52:25.8746093-04:00</DestTime>
+  <SourceFile>C:/perso/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_2.png</SourceFile>
+  <SourceTime>2019-03-07T12:24:41.096452-05:00</SourceTime>
+  <DestFile>C:/perso/MonoGame-Template/MonoGame-Template/Content/bin/Windows/Content/Images/player__Walk_2.xnb</DestFile>
+  <DestTime>2019-04-04T13:01:09.5464194-04:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2018-12-08T11:35:54-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
