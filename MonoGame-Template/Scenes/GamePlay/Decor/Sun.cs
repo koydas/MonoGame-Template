@@ -1,11 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame_Template.Scenes.GamePlay.Terrain.Interfaces;
 
-namespace MonoGame_Template.Scenes.GamePlay.Terrain
+namespace MonoGame_Template.Scenes.GamePlay.Decor
 {
-    public class Sun : ITerrain
+    public class Sun : IDecor
     {
         public Vector2 Position { get; set; }
         public Texture2D CurrentTexture { get; set; }

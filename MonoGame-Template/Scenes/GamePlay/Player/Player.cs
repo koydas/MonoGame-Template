@@ -3,35 +3,35 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Template.Common.Helpers;
 using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.GamePlay.Player;
 using tainicom.Aether.Physics2D.Dynamics;
 
 namespace MonoGame_Template.Scenes.GamePlay.Player
 {
-    public class Player
+    public class Player : ICollider
     {
+        public Body Body { get; set; }
         public Texture2D CurrentTexture { get; set; }
+
         public bool IsGrounded { get; set; }
 
         private int _currentFrame;
-        private List<Texture2D> _idle = new List<Texture2D>();
-        private List<Texture2D> _walk = new List<Texture2D>();
+        private readonly List<Texture2D> _idle = new List<Texture2D>();
+        private readonly List<Texture2D> _walk = new List<Texture2D>();
 
         private double _oldGameTime;
         private bool _faceRight = true;
         private const float MovementSpeed = 0.0005f;
         private const float JumpForce = 0.003f;
         private PlayerState _playerState = PlayerState.Idle;
-
-        public Body Body;
-
+        
         public Player()
         {
-            Body = GamePlay.World.CreateRectangle(1, 1, 1f, new Vector2(0,0));
+            Body = GamePlay.World.CreateRectangle(1, 1, 1f, new Vector2(0, 0));
             Body.SetFriction(0.2f);
             Body.SetRestitution(0.2f);
-            
             Body.BodyType = BodyType.Dynamic;
 
             Body.OnCollision += (sender, other, contact) => IsGrounded = true;
@@ -48,11 +48,10 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
             _walk.Add(content.Load<Texture2D>("images/player__Walk_3"));
         }
 
-        public void Update(GameTime gameTime, List<ICollider> colliders)
+        public void Update(GameTime gameTime)
         {
             Body.ApplyForce(Vector2.UnitY * 0.0005f);
-
-
+            
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
                 if (Body.LinearVelocity.X < MovementSpeed)
@@ -82,7 +81,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
             }
 
             // Avoid falling out of the screen
-            if (Body.Position.X * 64 < 0)
+            if (Body.Position.X.ToDisplayUnit() < 0)
             {
                 Body.Position = new Vector2(0, Body.Position.Y);
             }

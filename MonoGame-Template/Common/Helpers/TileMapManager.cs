@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Template.Scenes.GamePlay.Decor;
 using MonoGame_Template.Scenes.GamePlay.Terrain;
 using MonoGame_Template.Scenes.GamePlay.Terrain.Enums;
 using MonoGame_Template.Scenes.GamePlay.Terrain.Interfaces;
@@ -48,8 +49,9 @@ namespace MonoGame_Template.Common.Helpers
                             case TerrainType.Grass:
                                 secondList.Add(new Grass(tilePosition));
                                 break;
-                            case TerrainType.Sun:
-                                secondList.Add(new Sun(tilePosition));
+                                // TODO : Supporter les éléments décor
+                            //case TerrainType.Sun:
+                            //    secondList.Add(new Sun(tilePosition));
                                 break;
                             default:
                                 throw new NotImplementedException($"{column} is not supported.");

@@ -18,7 +18,7 @@ namespace MonoGame_Template.Scenes.GamePlay
     {
         private Player.Player _player;
         private readonly Camera2D _camera;
-        private List<ICollider> _colliders;
+        
         private ITerrain[][] _tiles;
         public static TerrainType[][] TilemapEnum;
         public static World World = new World(Vector2.Zero);
@@ -34,12 +34,11 @@ namespace MonoGame_Template.Scenes.GamePlay
 
         public void Initialize()
         {
-            _colliders = new List<ICollider>();
             _player = new Player.Player();
 
             int[][] tilemap = {
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0},
+                new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -83,7 +82,7 @@ namespace MonoGame_Template.Scenes.GamePlay
 
             World.Step(deltaTime);
 
-            _player.Update(gameTime,_colliders);
+            _player.Update(gameTime);
 
             _camera.Position = _player.Body.Position.X*64 > Main.WindowWidth / 2 
                 ? new Vector2(_player.Body.Position.X*64, Main.WindowHeight / 2) 
@@ -107,7 +106,7 @@ namespace MonoGame_Template.Scenes.GamePlay
 
             foreach (var tile in _tiles.SelectMany(x => x.Select(y => y)))
             {
-                Main.SpriteBatch.Draw(tile.CurrentTexture, tile.Position, Color.White);
+                Main.SpriteBatch.Draw(tile.CurrentTexture, tile.Body.Position * 64, Color.White);
             }
 
             _player.Draw(gameTime);
