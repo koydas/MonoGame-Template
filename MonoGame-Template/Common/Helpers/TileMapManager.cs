@@ -12,16 +12,16 @@ namespace MonoGame_Template.Common.Helpers
 {
     public static class TileMapManager
     {
-        public static TerrainType[][] ToEnum(this int[][] tileMap)
+        public static TileType[][] ToEnum(this int[][] tileMap)
         {
-            var list = new List<TerrainType[]>();
+            var list = new List<TileType[]>();
 
             foreach (var row in tileMap)
             {
-                var secondList = new List<TerrainType>();
+                var secondList = new List<TileType>();
                 foreach (var column in row)
                 {
-                    secondList.Add((TerrainType)column);
+                    secondList.Add((TileType)column);
                 }
 
                 list.Add(secondList.ToArray());
@@ -30,7 +30,7 @@ namespace MonoGame_Template.Common.Helpers
             return list.ToArray();
         }
 
-        public static ITerrain[][] Generate(TerrainType[][] tileMap, int tileSize)
+        public static ITerrain[][] Generate(TileType[][] tileMap, int tileSize)
         {
             var list = new List<ITerrain[]>();
 
@@ -42,19 +42,19 @@ namespace MonoGame_Template.Common.Helpers
                 tilePosition.X = 0;
                 foreach (var column in row)
                 {
-                    if (column != TerrainType.Nothing)
+                    if (column != TileType.Nothing)
                     {
                         switch (column)
                         {
-                            case TerrainType.Grass:
+                            case TileType.Grass:
                                 secondList.Add(new Grass(tilePosition));
                                 break;
                                 // TODO : Supporter les éléments décor
-                            //case TerrainType.Sun:
+                            //case TileType.Sun:
                             //    secondList.Add(new Sun(tilePosition));
-                                break;
-                            default:
-                                throw new NotImplementedException($"{column} is not supported.");
+                                //break;
+                            //default:
+                            //    throw new NotImplementedException($"{column} is not supported.");
                         }
                     }
 

@@ -56,7 +56,7 @@
     <Compile Include="Scenes\GamePlay\Terrain\Grass.cs" />
     <Compile Include="Scenes\GamePlay\Terrain\Interfaces\ITerrain.cs" />
     <Compile Include="Scenes\GamePlay\Decor\Sun.cs" />
-    <Compile Include="Scenes\GamePlay\Terrain\Enums\TerrainType.cs" />
+    <Compile Include="Scenes\GamePlay\Terrain\Enums\TileType.cs" />
     <Compile Include="Scenes\Interfaces\IScene.cs" />
     <Compile Include="Scenes\Menu\Menu.cs" />
     <Compile Include="Scenes\Menu\Enums\MenuItem.cs" />

@@ -1,9 +1,10 @@
 ﻿namespace MonoGame_Template.Scenes.GamePlay.Terrain.Enums
 {
-    public enum TerrainType
+    public enum TileType
     {
         Nothing = 0,
-        Grass = 1,
-        Sun = 2
+        Player = 1,
+        Grass = 2,
+        Sun = 3
     }
 }

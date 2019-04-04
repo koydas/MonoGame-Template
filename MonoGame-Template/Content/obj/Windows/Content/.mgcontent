@@ -4,15 +4,15 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/perso/MonoGame-Template/MonoGame-Template/Content/Arial.spritefont</File>
-    <File>C:/perso/MonoGame-Template/MonoGame-Template/Content/Images/grass.png</File>
-    <File>C:/perso/MonoGame-Template/MonoGame-Template/Content/Images/player__Idle_0.png</File>
-    <File>C:/perso/MonoGame-Template/MonoGame-Template/Content/Images/player__Idle_1.png</File>
-    <File>C:/perso/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_0.png</File>
-    <File>C:/perso/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_1.png</File>
-    <File>C:/perso/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_2.png</File>
-    <File>C:/perso/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_3.png</File>
-    <File>C:/perso/MonoGame-Template/MonoGame-Template/Content/Images/sun.png</File>
+    <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Arial.spritefont</File>
+    <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/grass.png</File>
+    <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/player__Idle_0.png</File>
+    <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/player__Idle_1.png</File>
+    <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_0.png</File>
+    <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_1.png</File>
+    <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_2.png</File>
+    <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/player__Walk_3.png</File>
+    <File>C:/Dev/MonoGame/Templates/MonoGame-Template/MonoGame-Template/MonoGame-Template/MonoGame-Template/Content/Images/sun.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

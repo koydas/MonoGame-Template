@@ -59,7 +59,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Player.Helpers
         {
             if (player.TeleportOpacity < 1)
             {
-                player.TeleportOpacity += .0001f * deltaTime;
+                player.TeleportOpacity += .001f * deltaTime;
 
                 return true;
             }

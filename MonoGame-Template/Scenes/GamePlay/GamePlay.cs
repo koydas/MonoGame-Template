@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -20,7 +21,7 @@ namespace MonoGame_Template.Scenes.GamePlay
         private readonly Camera2D _camera;
         
         private ITerrain[][] _tiles;
-        public static TerrainType[][] TilemapEnum;
+        public static TileType[][] TilemapEnum;
         public static World World = new World(Vector2.Zero);
 
         public GamePlay()
@@ -42,13 +43,46 @@ namespace MonoGame_Template.Scenes.GamePlay
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new [] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                new [] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                new [] {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                new [] {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-                new [] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+                new [] {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new [] {2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                new [] {2, 2, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2},
+                new [] {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}
             };
-
+            
             TilemapEnum = tilemap.ToEnum();
+
+            var numberOfPlayers = TilemapEnum.SelectMany(x => x).Count(x => x == TileType.Player);
+            if (numberOfPlayers < 1)
+                throw new Exception("Must have a player on tile-map.");
+            
+            if (numberOfPlayers > 1)
+                throw new Exception("Must have only one player on tile-map.");
+
+            int i = 0;
+            bool found = false;
+            foreach (var row in TilemapEnum)
+            {
+                int j = 0;
+
+                foreach (var column in row)
+                {
+                    if (column == TileType.Player)
+                    {
+                        _player.Body.Position = new Vector2(j, i);
+                        found = true;
+                        break;
+                    }
+                    j++;
+                }
+
+                if (found)
+                {
+                    break;
+                }
+
+                i++;
+            }
+
             _tiles = TileMapManager.Generate(TilemapEnum, TileSize);
         }
 
