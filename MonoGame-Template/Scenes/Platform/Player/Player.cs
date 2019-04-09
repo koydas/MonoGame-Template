@@ -2,15 +2,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame_Template.Common.Enums;
-using MonoGame_Template.Common.Helpers;
 using MonoGame_Template.Common.Interfaces;
-using MonoGame_Template.Common.Scenes.GamePlay.Player;
-using MonoGame_Template.Scenes.GamePlay.Player.Helpers;
+using MonoGame_Template.Scenes.Platform.Player.Helpers;
 using tainicom.Aether.Physics2D.Dynamics;
 
-namespace MonoGame_Template.Scenes.GamePlay.Player
+namespace MonoGame_Template.Scenes.Platform.Player
 {
     public class Player : ICollider
     {
@@ -32,7 +29,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Player
 
         public Player()
         {
-            Body = GamePlay.World.CreateRectangle(1, 1, 1f, new Vector2(0, 0));
+            Body = Platform.World.CreateRectangle(1, 1, 1f, new Vector2(0, 0));
             Body.SetFriction(0.2f);
             Body.SetRestitution(0.2f);
             Body.BodyType = BodyType.Dynamic;

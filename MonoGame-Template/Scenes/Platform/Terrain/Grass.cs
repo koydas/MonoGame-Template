@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame_Template.Scenes.GamePlay.Terrain.Interfaces;
+using MonoGame_Template.Scenes.Platform.Terrain.Interfaces;
 using tainicom.Aether.Physics2D.Dynamics;
 
-namespace MonoGame_Template.Scenes.GamePlay.Terrain
+namespace MonoGame_Template.Scenes.Platform.Terrain
 {
     public class Grass: ITerrain
     {
@@ -13,7 +13,7 @@ namespace MonoGame_Template.Scenes.GamePlay.Terrain
 
         public Grass(Vector2 position)
         {
-            Body = GamePlay.World.CreateRectangle(1, 1, 1f, position / 64);
+            Body = Platform.World.CreateRectangle(1, 1, 1f, position / 64);
         }
 
         public void LoadContent(ContentManager content)

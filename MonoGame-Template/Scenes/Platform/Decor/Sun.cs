@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame_Template.Scenes.Platform.Decor.Interfaces;
 
-namespace MonoGame_Template.Scenes.GamePlay.Decor
+namespace MonoGame_Template.Scenes.Platform.Decor
 {
     public class Sun : IDecor
     {

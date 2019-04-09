@@ -1,4 +1,4 @@
-﻿namespace MonoGame_Template.Common.Scenes.GamePlay.Player
+﻿namespace MonoGame_Template.Scenes.Platform.Player
 {
     public enum PlayerState
     {

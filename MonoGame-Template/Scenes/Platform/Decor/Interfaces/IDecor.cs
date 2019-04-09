@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MonoGame_Template.Scenes.GamePlay.Decor
+namespace MonoGame_Template.Scenes.Platform.Decor.Interfaces
 {
     public interface IDecor
     {

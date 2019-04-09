@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame_Template.Common.Enums;
 using MonoGame_Template.Common.Helpers;
 
-namespace MonoGame_Template.Scenes.GamePlay.Player.Helpers
+namespace MonoGame_Template.Scenes.Platform.Player.Helpers
 {
     public static class PlayerMovement
     {

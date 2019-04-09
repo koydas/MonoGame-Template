@@ -1,4 +1,4 @@
-﻿namespace MonoGame_Template.Scenes.GamePlay.Terrain.Enums
+﻿namespace MonoGame_Template.Scenes.Platform.Terrain.Enums
 {
     public enum TileType
     {

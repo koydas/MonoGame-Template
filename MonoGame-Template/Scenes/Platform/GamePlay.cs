@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -7,15 +6,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame_Template.Common;
 using MonoGame_Template.Common.Helpers;
-using MonoGame_Template.Common.Interfaces;
 using MonoGame_Template.Common.Scenes.Interfaces;
-using MonoGame_Template.Scenes.GamePlay.Terrain.Enums;
-using MonoGame_Template.Scenes.GamePlay.Terrain.Interfaces;
+using MonoGame_Template.Scenes.Platform.Terrain.Enums;
+using MonoGame_Template.Scenes.Platform.Terrain.Interfaces;
 using tainicom.Aether.Physics2D.Dynamics;
 
-namespace MonoGame_Template.Scenes.GamePlay
+namespace MonoGame_Template.Scenes.Platform
 {
-    public class GamePlay : IScene
+    public class Platform : IScene
     {
         private Player.Player _player;
         private readonly Camera2D _camera;
@@ -24,7 +22,7 @@ namespace MonoGame_Template.Scenes.GamePlay
         public static TileType[][] TilemapEnum;
         public static World World = new World(Vector2.Zero);
 
-        public GamePlay()
+        public Platform()
         {
             Initialize();
             LoadContent(Main.ContentManager);

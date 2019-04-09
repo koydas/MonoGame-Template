@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame_Template.Common.Helpers;
 using MonoGame_Template.Common.Scenes.Interfaces;
 using MonoGame_Template.Common.Scenes.Menu.Enums;
+using MonoGame_Template.Scenes.Platform;
 
 namespace MonoGame_Template.Scenes.Menu
 {
@@ -57,7 +58,7 @@ namespace MonoGame_Template.Scenes.Menu
                 switch (_selectedMenuItem)
                 {
                     case MenuItem.Play:
-                        Main.CurrentScene = new GamePlay.GamePlay();
+                        Main.CurrentScene = new Platform.Platform();
                         break;
                     case MenuItem.Quit:
                         Main.Self.Exit();
