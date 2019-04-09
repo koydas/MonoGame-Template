@@ -2,7 +2,8 @@
 {
     public enum MenuItem
     {
-        Play,
+        Platform,
+        Zombies,
         Quit
     }
 }

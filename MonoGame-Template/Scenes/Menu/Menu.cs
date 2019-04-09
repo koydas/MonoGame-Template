@@ -18,7 +18,7 @@ namespace MonoGame_Template.Scenes.Menu
 
         public void Initialize()
         {
-            _selectedMenuItem = MenuItem.Play;
+            _selectedMenuItem = MenuItem.Platform;
 
             _menuPosition = new Vector2
             {
@@ -48,17 +48,35 @@ namespace MonoGame_Template.Scenes.Menu
 
             if (keyboardState.IsKeyPressed(Keys.Down) || keyboardState.IsKeyPressed(Keys.Up))
             {
-                _selectedMenuItem = _selectedMenuItem == MenuItem.Play
-                    ? MenuItem.Quit
-                    : MenuItem.Play;
+                var index = (int) _selectedMenuItem;
+
+                if (keyboardState.IsKeyDown(Keys.Down))
+                    index++;
+
+                if (keyboardState.IsKeyDown(Keys.Up))
+                    index--;
+
+                if ((int)MenuItem.Quit < index)
+                {
+                    index = 0;
+                }
+
+                if (index < 0)
+                {
+                    index = (int) MenuItem.Quit;
+                }
+
+                _selectedMenuItem = (MenuItem) index;
             }
 
             if (keyboardState.IsKeyPressed(Keys.Enter))
             {
                 switch (_selectedMenuItem)
                 {
-                    case MenuItem.Play:
+                    case MenuItem.Platform:
                         Main.CurrentScene = new Platform.Platform();
+                        break;
+                    case MenuItem.Zombies:
                         break;
                     case MenuItem.Quit:
                         Main.Self.Exit();
